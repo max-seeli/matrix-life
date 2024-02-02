@@ -24,7 +24,7 @@ class GameOfLife(Container):
         self.cell_size = min(self.height / self.rows, self.width / self.cols)
 
         self.grid = [[0] * self.rows for _ in range(self.cols)]
-        self.mode = "running"
+        self.running = True
 
         self.bind("<Button-1>", self.on_click)
         self.bind("<B1-Motion>", self.on_drag)
@@ -45,7 +45,7 @@ class GameOfLife(Container):
                         (j + 1) * self.cell_size,
                         fill="black",
                     )
-        if self.mode == "running":
+        if self.running:
             self.update()
         self.root.after(100, self.draw)
     
@@ -92,10 +92,7 @@ class GameOfLife(Container):
         self.grid = [[0] * self.rows for _ in range(self.cols)]
 
     def pause(self, _):
-        if self.mode == "running":
-            self.mode = "paused"
-        else:
-            self.mode = "running"
+        self.running = not self.running
 
 
 GameOfLife(800, 600)
