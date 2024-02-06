@@ -14,3 +14,10 @@ The evolution is defined by a small set of rules:
 
 ## Elementary Cellular Automata
 Elementary cellular automata are the simplest possible one-dimensional cellular automata. They consist of a line of cells, each of which can be in one of two states, and rules for updating the cells based on the states of their neighbors. The rules are specified by a table that lists all the possible configurations of the neighborhood and the state each configuration leads to in the next time step. As there are $2^3 = 8$ possible configurations for a neighborhood of three cells, there are $2^8 = 256$ rulesets defining elementary cellular automata.
+
+## Floating Game of Life
+Floating Game of Life is my custom variant of Conway's Game of Life, where the cells state is not restricted to 0 or 1, but can be any real number in the range [0, 1]. This state of the cell is its "activation" and changes based on the sum of activation of its neighbors. The rules are as follows:
+1. Any cell with neighborhood activation sum less than 2.0 reduces its activation by 15%, as if by underpopulation.
+2. Any cell with neighborhood activation sum above 3.0 reduces its activation by 15%, as if by overpopulation.
+3. Any cell with neighborhood activation sum around 3.0 (+/- 0.15) is fully activated, as if by reproduction.
+4. Any other cell remains in its current state.
