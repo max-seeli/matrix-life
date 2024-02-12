@@ -22,4 +22,7 @@ Floating Game of Life is my custom variant of Conway's Game of Life, where the c
 3. Any cell with neighborhood activation sum around 3.0 (+/- 0.15) is fully activated, as if by reproduction.
 4. Any other cell remains in its current state.
 
+### Visualizations
+The following is a visualization of an interesting base structure that converges after 275 timesteps to four squares (which are stable similar to the regular Conway's Game of Life)
+
 ![Floating Simulation](sim/floating_sim.gif)
