@@ -21,3 +21,5 @@ Floating Game of Life is my custom variant of Conway's Game of Life, where the c
 2. Any cell with neighborhood activation sum above 3.0 reduces its activation by 15%, as if by overpopulation.
 3. Any cell with neighborhood activation sum around 3.0 (+/- 0.15) is fully activated, as if by reproduction.
 4. Any other cell remains in its current state.
+
+![Floating Simulation](sim/floating_sim.gif)
