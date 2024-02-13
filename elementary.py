@@ -42,7 +42,6 @@ class ElementaryCellularAutomaton(Container):
         self.bind("<space>", self.pause)      
 
     def draw(self):
-        self.canvas.delete("all")
         self.draw_grid(self.cols, self.rows, self.cell_size)
         for j, state in enumerate(self.history):
             for i, cell in enumerate(state):
@@ -56,7 +55,6 @@ class ElementaryCellularAutomaton(Container):
                     )
         if self.running:
             self.step()
-        self.root.after(100, self.draw)
     
     def step(self, _=None):
         next_state = [0] * self.cols

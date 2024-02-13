@@ -33,7 +33,6 @@ class GameOfLife(Container):
         self.bind("<space>", self.pause)
 
     def draw(self):
-        self.canvas.delete("all")
         self.draw_grid(self.cols, self.rows, self.cell_size)
         for i in range(self.cols):
             for j in range(self.rows):
@@ -47,7 +46,6 @@ class GameOfLife(Container):
                     )
         if self.running:
             self.update()
-        self.root.after(100, self.draw)
     
     def get_neighbours(self, x, y):
         neighbours = 0

@@ -39,7 +39,6 @@ class FloatingConway(Container):
         self.bind("<space>", self.pause)
 
     def draw(self):
-        self.canvas.delete("all")
         for i in range(self.cols):
             for j in range(self.rows):
                 c = self.float_to_color(self.grid[i][j])
@@ -54,7 +53,6 @@ class FloatingConway(Container):
         
         if self.running:
             self.update()
-        self.root.after(100, self.draw)
 
     def float_to_color(self, state, start_hue=230, end_hue=320):
         state = max(0, min(1, state))
