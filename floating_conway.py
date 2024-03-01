@@ -1,7 +1,39 @@
 import colorsys
-from drawing import Container
+from grid import GridCell, GridAutomaton, NeighbourhoodType, Neighbourhood
 
-class FloatingConway(Container):
+class FloatingConwayCell(GridCell):
+    
+    def __init__(self, activation=0):
+        self.activation = activation
+
+    def update(self, neighbours):
+        total_activation = sum(n.activation for n in neighbours)
+        if (total_activation < 2 or total_activation > 3):
+            return FloatingConwayCell(self.activation * 0.85)
+        elif abs(total_activation - 3) < 0.15:
+            return FloatingConwayCell(1)
+        else:
+            return FloatingConwayCell(self.activation)
+
+    def activate(self):
+        return FloatingConwayCell(1)
+
+    @property
+    def color(self):
+        return self.float_to_color(self.activation)
+
+    def float_to_color(self, state, start_hue=230, end_hue=320):
+        state = max(0, min(1, state))
+
+        hue = start_hue + (end_hue - start_hue) * state
+        saturation = 1.0
+        value = 0.8
+
+        r, g, b = colorsys.hsv_to_rgb(hue / 360, saturation, value)
+        return f'#{int(r * 255):02x}{int(g * 255):02x}{int(b * 255):02x}'
+    
+
+class FloatingConway(GridAutomaton):
     """
     A version of Conway's Game of Life with a floating point grid. For easier
     understanding, the grid is visualized with colors. The current state of a
@@ -23,74 +55,9 @@ class FloatingConway(Container):
       of Life)
     - All other cells will remain at their current activation.
     """
-        
-    def setup(self):
-        self.cols = 80
-        self.rows = 80
-        self.cell_size = min(self.height / self.rows, self.width / self.cols)
+    def __init__(self, **kwargs):
+        super().__init__(FloatingConwayCell, **kwargs)
 
-        self.grid = [[0] * self.rows for _ in range(self.cols)]           
-        self.running = True
-
-        self.bind("<Button-1>", self.activate)
-        self.bind("<B1-Motion>", self.activate)
-        self.bind("<Button-3>", self.clear)
-        self.bind("<Button-2>", self.update)
-        self.bind("<space>", self.pause)
-
-    def draw(self):
-        for i in range(self.cols):
-            for j in range(self.rows):
-                c = self.float_to_color(self.grid[i][j])
-                self.canvas.create_rectangle(
-                    i * self.cell_size,
-                    j * self.cell_size,
-                    (i + 1) * self.cell_size,
-                    (j + 1) * self.cell_size,
-                    fill=c,
-                )
-        self.draw_grid(self.cols, self.rows, self.cell_size, color="#2F2F2F")
-        
-        if self.running:
-            self.update()
-
-    def float_to_color(self, state, start_hue=230, end_hue=320):
-        state = max(0, min(1, state))
-
-        hue = start_hue + (end_hue - start_hue) * state
-        saturation = 1.0
-        value = 0.8
-
-        r, g, b = colorsys.hsv_to_rgb(hue / 360, saturation, value)
-        return f'#{int(r * 255):02x}{int(g * 255):02x}{int(b * 255):02x}'
-    
-    def update(self, _=None):
-        new_grid = [[0] * self.rows for _ in range(self.cols)]
-        for i in range(self.cols):
-            for j in range(self.rows):
-                neighbours = self.get_neighbourhood_activation(i, j)
-
-                if (neighbours < 2 or neighbours > 3):
-                    new_grid[i][j] = self.grid[i][j] * 0.85
-                elif abs(neighbours - 3) < 0.15:
-                    new_grid[i][j] = 1
-                else:
-                    new_grid[i][j] = self.grid[i][j]
-
-        self.grid = new_grid
-
-    def get_neighbourhood_activation(self, x, y):
-        total_activation = 0
-        for i in range(-1, 2):
-            for j in range(-1, 2):
-                col = (x + i + self.cols) % self.cols
-                row = (y + j + self.rows) % self.rows
-                
-                total_activation += self.grid[col][row]
-    
-        total_activation -= self.grid[x][y]
-        return total_activation
-    
     def draw_pattern(self, x, y):
         pattern = [
             [0, 0, 1, 1, 1, 1, 0, 0],
@@ -106,22 +73,6 @@ class FloatingConway(Container):
             for j in range(len(pattern[i])):
                 self.grid[(x + i) % self.cols][(y + j) % self.rows] = pattern[i][j]
 
-    def activate(self, event):
-        x, y = self.get_cell(event)
-        self.grid[x][y] = 1
-
-    def get_cell(self, event):
-        bound = lambda value, min_value, max_value: min(max(value, min_value), max_value)
-
-        x = bound(int(event.x / self.cell_size), 0, self.cols - 1)
-        y = bound(int(event.y / self.cell_size), 0, self.rows - 1)
-        return x, y
-
-    def clear(self, _):
-        self.grid = [[0] * self.rows for _ in range(self.cols)]
-
-    def pause(self, _):
-        self.running = not self.running
-
-
-FloatingConway(800, 800)
+if __name__ == "__main__":
+    FloatingConway()
+    
