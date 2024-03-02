@@ -34,9 +34,10 @@ class Neighbourhood:
     """
     A neighbourhood for grid-based automata.
     """
-    def __init__(self, type: NeighbourhoodType, radius: int = 1):
+    def __init__(self, type: NeighbourhoodType, radius: int = 1, positional: bool = False):
         self.type = type
         self.radius = radius
+        self.positional = positional
 
     def get_neighbours(self, grid, i, j):
         if self.type == NeighbourhoodType.MOORE:
@@ -52,7 +53,10 @@ class Neighbourhood:
                     continue
                 col = (i + x + len(grid)) % len(grid)
                 row = (j + y + len(grid[0])) % len(grid[0])
-                neighbours.append(grid[col][row])
+                if self.positional:
+                    neighbours.append((grid[col][row], (x, y)))
+                else:
+                    neighbours.append(grid[col][row])
         return neighbours
 
     def __get_von_neumann_neighbours(self, grid, i, j):
@@ -65,7 +69,10 @@ class Neighbourhood:
                     continue
                 col = (i + x + len(grid)) % len(grid)
                 row = (j + y + len(grid[0])) % len(grid[0])
-                neighbours.append(grid[col][row])
+                if self.positional:
+                    neighbours.append((grid[col][row], (x, y)))
+                else:
+                    neighbours.append(grid[col][row])
         return neighbours
 
 
@@ -89,7 +96,7 @@ class GridAutomaton(Container):
         
     def setup(self):
         self.cell_size = int(min(self.height / self.rows, self.width / self.cols))
-        self.grid = self.__init_grid()
+        self.grid = self.empty_grid()
         
         self.running = True
         self.bind("<space>", lambda _: setattr(self, 'running', not self.running))
@@ -121,7 +128,7 @@ class GridAutomaton(Container):
             self.update()
 
     def update(self):
-        new_grid = self.__init_grid()
+        new_grid = self.empty_grid()
         for i in range(self.cols):
             for j in range(self.rows):
                 new_grid[i][j] = self.grid[i][j].update(self.get_neighbours(self.grid, i, j))
@@ -134,7 +141,7 @@ class GridAutomaton(Container):
         self.grid[i][j] = self.grid[i][j].activate()
 
     def right_click(self, i, j):
-        self.grid = self.__init_grid()
+        self.grid = self.empty_grid()
 
-    def __init_grid(self):
+    def empty_grid(self):
         return [[self.cell_type()] * self.rows for _ in range(self.cols)]
