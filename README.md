@@ -26,3 +26,13 @@ Floating Game of Life is my custom variant of Conway's Game of Life, where the c
 The following is a visualization of an interesting base structure that converges after 275 timesteps to four squares (which are stable similar to the regular Conway's Game of Life)
 
 ![Floating Simulation](sim/floating_sim.gif)
+
+## Langton's Loops
+Langton's Loops is a cellular automaton devised by Chris Langton which introduces self-replicating loops. There are a total of 8 different states a cell can be in, and a vast amount of rules that define the evolution of the cells. 
+
+### Visualizations
+The following is a visualization of the initial state and the automaton after some timesteps.
+
+| Initial State | After timesteps |
+| --- | --- |
+| ![Langton's Loops Initial State](sim/langton_sim_1.png) | ![Langton's Loops Simulation](sim/langton_sim_2.png) |
