@@ -130,6 +130,7 @@ class GridAutomaton(Container):
                         j * self.cell_size + self.cell_size / 2,
                         text=t,
                         fill="#FFFFFF",
+                        font=("Arial", int(self.cell_size / 2)),
                     )
         self.draw_grid(self.cols, self.rows, self.cell_size, color="#2F2F2F")
         
