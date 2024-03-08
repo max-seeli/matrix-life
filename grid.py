@@ -1,25 +1,25 @@
 from __future__ import annotations
-from abc import ABC, abstractmethod
 from enum import Enum
 
 from drawing import Container
 
-class GridCell(ABC):
+class GridCell:
     """
     A cell in a grid-based automaton.
     """
-    @abstractmethod
     def update(self, neighbours) -> GridCell:
         raise NotImplementedError
 
-    @abstractmethod
     def activate(self) -> GridCell:
         raise NotImplementedError
 
     @property
-    @abstractmethod
     def color(self):
         raise NotImplementedError
+    
+    @property
+    def text(self):
+        return None
     
 
 class NeighbourhoodType(Enum):
@@ -92,13 +92,14 @@ class GridAutomaton(Container):
         self.get_neighbours = neighbourhood.get_neighbours
         self.rows = rows
         self.cols = cols
+        self.cell_size = int(min(height / self.rows, width / self.cols))
+        
+        self.running = True
         super().__init__(width, height, frame_rate)
         
     def setup(self):
-        self.cell_size = int(min(self.height / self.rows, self.width / self.cols))
         self.grid = self.empty_grid()
         
-        self.running = True
         self.bind("<space>", lambda _: setattr(self, 'running', not self.running))
         
         def get_cell(event):
@@ -115,6 +116,7 @@ class GridAutomaton(Container):
         for i in range(self.cols):
             for j in range(self.rows):
                 c = self.grid[i][j].color
+                t = self.grid[i][j].text
                 self.canvas.create_rectangle(
                     i * self.cell_size,
                     j * self.cell_size,
@@ -122,6 +124,13 @@ class GridAutomaton(Container):
                     (j + 1) * self.cell_size,
                     fill=c,
                 )
+                if t:
+                    self.canvas.create_text(
+                        i * self.cell_size + self.cell_size / 2,
+                        j * self.cell_size + self.cell_size / 2,
+                        text=t,
+                        fill="#FFFFFF",
+                    )
         self.draw_grid(self.cols, self.rows, self.cell_size, color="#2F2F2F")
         
         if self.running:
