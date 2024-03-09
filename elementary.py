@@ -58,7 +58,7 @@ class ElementaryCellularAutomaton(Container):
     
     def step(self, _=None):
         next_state = [0] * self.cols
-        for i in range(1, self.cols - 1):
+        for i in range(0, self.cols):
             neighbours = self.get_neighbours(i)
             next_state[i] = self.ruleset[7 - int("".join(map(str, neighbours)), 2)]
         self.history.append(next_state)
@@ -67,11 +67,7 @@ class ElementaryCellularAutomaton(Container):
             self.history.pop(0)
 
     def get_neighbours(self, x):
-        neighbours = []
-        for i in range(-1, 2):
-            col = (x + i + self.cols) % self.cols
-            neighbours.append(self.state[col])
-        return neighbours
+        return [self.state[(x + i + self.cols) % self.cols] for i in [-1, 0, 1]]
     
     def on_click(self, event):
         x = event.x // self.cell_size
