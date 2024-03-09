@@ -87,7 +87,8 @@ class GridAutomaton(Container):
                  cols: int = 20,
                  width: int = 500,
                  height: int = 500,
-                 frame_rate: int = 5):
+                 frame_rate: int = 5,
+                 **kwargs):
         self.cell_type = cell_type
         self.get_neighbours = neighbourhood.get_neighbours
         self.rows = rows
@@ -95,7 +96,7 @@ class GridAutomaton(Container):
         self.cell_size = int(min(height / self.rows, width / self.cols))
         
         self.running = True
-        super().__init__(width, height, frame_rate)
+        super().__init__(width, height, frame_rate, **kwargs)
         
     def setup(self):
         self.grid = self.empty_grid()

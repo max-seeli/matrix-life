@@ -1,8 +1,10 @@
 from tkinter import *
+from PIL import Image, ImageGrab
+import os
 
 class Container:
 
-    def __init__(self, width, height, frame_rate=5):
+    def __init__(self, width, height, frame_rate=5, gif_path=None, gif_length=100):
         """
         Create a container to draw on.
 
@@ -14,10 +16,22 @@ class Container:
             The height of the container.
         frame_rate : int, optional
             The frame rate of the container. Default is 5.
+        gif_path : str, optional
+            The path to save the container as a gif. Default is None.
+        gif_length : int, optional
+            The number of frames of the gif. Default is 100.
         """
         self.width = width
         self.height = height
         self.frame_rate = frame_rate
+
+        if gif_path:
+            self.gif_path = gif_path
+            self.gif_length = gif_length
+            self.gif_frames = []
+
+            if os.path.exists(gif_path):
+                os.remove(gif_path)
 
         self.root = Tk()
         self.canvas = Canvas(self.root, width=self.width, height=self.height)
@@ -27,6 +41,18 @@ class Container:
         def _draw():
             self.canvas.delete("all")
             self.draw()
+
+            if gif_path and len(self.gif_frames) < self.gif_length:
+                self.gif_frames.append(self.capture_frame())
+
+                if len(self.gif_frames) == self.gif_length:
+                    self.gif_frames[1].save(
+                        self.gif_path,
+                        save_all=True,
+                        append_images=self.gif_frames[1:],
+                        duration=100,
+                        loop=0
+                    )
             self.root.after(int(1000 / self.frame_rate), _draw)
         self.root.after(0, _draw)
 
@@ -101,3 +127,19 @@ class Container:
             self.canvas.create_line(0, j * cell_size[1],
                                     cols * cell_size[0], j * cell_size[1],
                                     fill=color, width=linewidth)
+            
+    def capture_frame(self):
+        """
+        Capture the current frame of the canvas.
+
+        Returns
+        -------
+        Image
+            The current frame of the canvas.
+        """
+        x0 = self.root.winfo_rootx() 
+        y0 = self.root.winfo_rooty()
+        x1 = x0 + self.root.winfo_width()
+        y1 = y0 + self.root.winfo_height()
+
+        return ImageGrab.grab(xdisplay=":0").crop((x0, y0, x1, y1))
