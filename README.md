@@ -15,6 +15,11 @@ The evolution is defined by a small set of rules:
 ## Elementary Cellular Automata
 Elementary cellular automata are the simplest possible one-dimensional cellular automata. They consist of a line of cells, each of which can be in one of two states, and rules for updating the cells based on the states of their neighbors. The rules are specified by a table that lists all the possible configurations of the neighborhood and the state each configuration leads to in the next time step. As there are $2^3 = 8$ possible configurations for a neighborhood of three cells, there are $2^8 = 256$ rulesets defining elementary cellular automata.
 
+### Visualizations
+The following is a visualization of the first 150 timesteps of the elementary cellular automaton with rule 22. In the starting state, only the center cell is active, and the automaton evolves to form a pattern that is initially similar to the Sierpinski triangle.
+
+![Rule 22](sim/elementary_rule22.gif)
+
 ## Floating Game of Life
 Floating Game of Life is my custom variant of Conway's Game of Life, where the cells state is not restricted to 0 or 1, but can be any real number in the range [0, 1]. This state of the cell is its "activation" and changes based on the sum of activation of its neighbors. The rules are as follows:
 1. Any cell with neighborhood activation sum less than 2.0 reduces its activation by 15%, as if by underpopulation.
@@ -25,14 +30,12 @@ Floating Game of Life is my custom variant of Conway's Game of Life, where the c
 ### Visualizations
 The following is a visualization of an interesting base structure that converges after 275 timesteps to four squares (which are stable similar to the regular Conway's Game of Life)
 
-![Floating Simulation](sim/floating_sim.gif)
+![Floating Simulation](sim/floating_conway.gif)
 
 ## Langton's Loops
 Langton's Loops is a cellular automaton devised by Chris Langton which introduces self-replicating loops. There are a total of 8 different states a cell can be in, and a vast amount of rules that define the evolution of the cells. 
 
 ### Visualizations
-The following is a visualization of the initial state and the automaton after some timesteps.
+The following is a visualization of the first 600 timesteps of the Langton's Loops cellular automaton. 
 
-| Initial State | After timesteps |
-| --- | --- |
-| ![Langton's Loops Initial State](sim/langton_sim_1.png) | ![Langton's Loops Simulation](sim/langton_sim_2.png) |
+![Langton's Loops Initial State](sim/langton_loops.gif)

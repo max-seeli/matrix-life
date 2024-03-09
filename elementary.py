@@ -1,4 +1,5 @@
 from drawing import Container
+from warnings import warn
 
 class ElementaryCellularAutomaton(Container):
     """
@@ -22,19 +23,32 @@ class ElementaryCellularAutomaton(Container):
 
     Source: https://en.wikipedia.org/wiki/Elementary_cellular_automaton
     """
+    def __init__(self, width=810, height=600, cols=81, rule=22, start_pattern=[1], **kwargs):
+        self.cols = cols
+        self.cell_size = width // self.cols
+        self.rows = height // self.cell_size
+            
+        self.rule = rule
+        
+        if len(start_pattern) > self.cols:
+            warn(f"Start pattern is too long, only the first {self.cols} cells will be used.")
+            self.start_pattern = start_pattern[:self.cols]
+        else:
+            self.start_pattern = start_pattern
+
+        self.running = True 
+
+        super().__init__(width, height, **kwargs)
 
     def setup(self):
-        self.cols = 80
-        self.cell_size = self.width // self.cols
-        self.rows = self.height // self.cell_size
-
         self.state = [0] * self.cols
+
+        start_offset = (self.cols - len(self.start_pattern)) // 2
+        self.state[start_offset:start_offset + len(self.start_pattern)] = self.start_pattern
+
         self.history = [self.state] 
 
-        self.rule = 110
         self.ruleset = [int(bit) for bit in bin(self.rule)[2:].zfill(8)]
-        
-        self.running = False 
 
         self.bind("<Button-1>", self.on_click)
         self.bind("<Button-3>", self.clear)
@@ -84,4 +98,4 @@ class ElementaryCellularAutomaton(Container):
         self.running = not self.running
 
 
-ElementaryCellularAutomaton(800, 600)
+ElementaryCellularAutomaton(gif_path="sim/elementary_rule22.gif", gif_length=150)

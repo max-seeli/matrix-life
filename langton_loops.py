@@ -307,4 +307,4 @@ class LangtonLoops(GridAutomaton):
 
 
 if __name__ == "__main__":
-    LangtonLoops(rows=88, cols=88, width=880, height=880)
+    LangtonLoops(rows=88, cols=88, width=880, height=880, gif_path="sim/langton_loops.gif", gif_length=600)

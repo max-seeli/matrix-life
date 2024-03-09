@@ -55,11 +55,22 @@ class FloatingConway(GridAutomaton):
       of Life)
     - All other cells will remain at their current activation.
     """
-    def __init__(self, **kwargs):
+    def __init__(self, pattern, **kwargs):
+        self.pattern = pattern
         super().__init__(FloatingConwayCell, **kwargs)
 
-    def draw_pattern(self, x, y):
-        pattern = [
+    def setup(self):
+        super().setup()
+
+        center_x = self.cols // 2
+        center_y = self.rows // 2
+        offset_x = center_x - len(self.pattern) // 2
+        offset_y = center_y - len(self.pattern) // 2
+        for y, row in enumerate(self.pattern):
+            for x, cell in enumerate(row):
+                self.grid[offset_x + x][offset_y + y] = FloatingConwayCell(cell)
+
+    pattern1 = [
             [0, 0, 1, 1, 1, 1, 0, 0],
             [0, 1, 0, 0, 0, 0, 1, 0],
             [1, 1, 0, 0, 0, 0, 1, 1],
@@ -68,11 +79,8 @@ class FloatingConway(GridAutomaton):
             [1, 1, 0, 0, 0, 0, 1, 1],
             [0, 1, 0, 0, 0, 0, 1, 0],
             [0, 0, 1, 1, 1, 1, 0, 0],
-        ]
-        for i in range(len(pattern)):
-            for j in range(len(pattern[i])):
-                self.grid[(x + i) % self.cols][(y + j) % self.rows] = pattern[i][j]
+    ]
 
 if __name__ == "__main__":
-    FloatingConway()
+    conway = FloatingConway(pattern=FloatingConway.pattern1, rows=30, cols=30, width=600, height=600, gif_path="sim/floating_conway.gif", gif_length=275)
     
