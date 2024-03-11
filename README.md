@@ -38,4 +38,12 @@ Langton's Loops is a cellular automaton devised by Chris Langton which introduce
 ### Visualizations
 The following is a visualization of the first 600 timesteps of the Langton's Loops cellular automaton. 
 
-![Langton's Loops Initial State](sim/langton_loops.gif)
+![Langton's Loops](sim/langton_loops.gif)
+
+## Chou-Reggia Loops
+The Chou-Reggia Loops present a reduction of the Langton's Loops in the size of the loops and the number of iterations needed for replication.
+
+### Visualizations
+The following is a visualization of the first 200 timesteps of the Chou-Reggia Loops cellular automaton.
+
+![Chou-Reggia Loops](sim/chou_reggia_loops.gif)
