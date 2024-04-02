@@ -1,6 +1,8 @@
 # matrix-life
 In this repository, I will be sharing my journey of learning and implementing the concepts of cellular automata and other related topics. 
 
+All the visualizations are done within the code provided in the `drawing.py` file. The visualizations are saved in the `sim` folder.
+
 ## Conway's Game of Life
 Every journey about cellular automata starts with the most famous one, Conway's Game of Life.
 
